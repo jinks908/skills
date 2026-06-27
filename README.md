@@ -37,6 +37,32 @@ npx skills@latest add mattpocock/skills
 
 4. Bam - you're ready to go.
 
+## Manual install (working from a fork)
+
+If you've forked this repo and want to install skills yourself instead of using `npx skills`, two scripts do it. Both treat each skill as a symlink back into the repo, so a `git pull` here keeps installed skills up to date.
+
+**Install everything globally** — links every non-deprecated skill into `~/.claude/skills` (and `~/.agents/skills`), so they're available in every repo:
+
+```bash
+./scripts/link-skills.sh
+```
+
+**Cherry-pick skills into one repo** — links only the named skills into `<target-repo>/.claude/skills`, so only that repo sees them. Use this when you don't want the same skills everywhere:
+
+```bash
+./scripts/add-skills.sh ~/code/repos/my-api tdd diagnosing-bugs grill-with-docs
+```
+
+Pass `--copy` to drop frozen, committable copies instead of symlinks (useful for sharing a repo with people who don't have your fork):
+
+```bash
+./scripts/add-skills.sh --copy ~/code/repos/my-api tdd
+```
+
+Some skills invoke others (e.g. `grill-with-docs` uses `grilling` and `domain-modeling`). `add-skills.sh` scans for these and warns when a referenced skill wasn't installed, printing the exact command to add the missing ones. The warning is advisory — the install still succeeds.
+
+Run `./scripts/list-skills.sh` to see every available skill name.
+
 ## Why These Skills Exist
 
 I built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.
